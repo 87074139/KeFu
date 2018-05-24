@@ -18,6 +18,8 @@ function ioServer(io) {
 
     var __uuids = [];
 
+    var kf_admin_online = false;
+
     //初始化连接人数
     redis.set('online_count',0,null,function (err,ret) {
         if(err){
@@ -42,8 +44,19 @@ function ioServer(io) {
             var uid = msg.uid;
             console.log(uid+'登录成功');
 
+            if(uid == AppConfig.KEFUUUID){
+                kf_admin_online = true;
+            }
+            console.log(kf_admin_online);
+
+            if(uid != AppConfig.KEFUUUID && !kf_admin_online){
+                
+                io.to(socket.id).emit("kf_admin_offline",{});
+                return;
+
+            }
             //通知用户上线
-            if(uid != AppConfig.KEFUUUID){
+            if(uid != AppConfig.KEFUUUID && kf_admin_online){
                 redis.get(AppConfig.KEFUUUID,function (err,sid) {
                     if(err){
                         console.error(err);
@@ -101,7 +114,8 @@ function ioServer(io) {
                         });
                     }
                 });
-            }
+            } 
+
 
             redis.set(uid,socket.id,null,function (err,ret) {
                 if(err){
@@ -138,6 +152,11 @@ function ioServer(io) {
                         console.error(err);
                     }
                 });
+
+                if(val == AppConfig.KEFUUUID) {
+                    kf_admin_online = false;
+                }
+
                 //通知用户下线
                 if(val != AppConfig.KEFUUUID){
                     redis.get(AppConfig.KEFUUUID,function (err,sid) {
@@ -212,6 +231,7 @@ function ioServer(io) {
                    if(err){
                        console.error(err);
                    }
+                   console.log(sid)
                    if(sid){
                        //给指定的客户端发送消息
                        var mg = {

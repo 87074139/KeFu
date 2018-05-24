@@ -15,5 +15,14 @@
 	"login": "login",
 	"password_placeholder": "password_placeholder",
 	"password_inputholder": "password_inputholder",
-	"please input password": "input password"
+	"please input password": "input password",
+	"question lable": "question",
+	"email label": "email",
+	"submit": "submit",
+	"reset": "reset",
+	"status_resoving": "solving",
+	"status_resoved": "soled",
+	"table_question_title": "question",
+	"table_time_title": "time",
+	"table_status_title": "status"
 }

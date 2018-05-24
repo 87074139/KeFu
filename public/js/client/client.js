@@ -215,4 +215,8 @@ $(function(){
     });
 
 
+    socket.on('kf_admin_offline',function(msg) {
+         document.location.href="/client/offline"   
+    });
+
 });

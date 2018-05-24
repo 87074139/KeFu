@@ -59,9 +59,10 @@
 </head>
 <body>
     <ul class="layui-nav" lay-filter="nav-admin">
-        <li class="layui-nav-item admin-index"><a href="/admin">我的对话</a></li>
-        <li class="layui-nav-item admin-users"><a href="/admin/users">访客</a></li>
-        <li class="layui-nav-item admin-setup"><a href="/admin/setup">设置</a></li>
+        <li class="layui-nav-item admin-index"><a href="/admin"><%= __('my conversation') %></a></li>
+        <li class="layui-nav-item admin-users"><a href="/admin/users"><%= __("guest") %></a></li>
+        <li class="layui-nav-item admin-setup"><a href="/admin/setup"><%= __("setting") %></a></li>
+        <li class="layui-nav-item admin-login"><a href="/admin/login"><%= __("login") %></a></li>
     </ul>
       
       

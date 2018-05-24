@@ -1,5 +1,6 @@
 var mongoose = require("mongoose");
-const DB_URL = 'mongodb://127.0.0.1:27017/kefu';
+var config   = require("../config/config")
+const DB_URL = config.config.mongodbUrl;//'mongodb://127.0.0.1:27017/kefu';
 mongoose.connect(DB_URL);
 
 /**

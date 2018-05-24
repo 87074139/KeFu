@@ -8,13 +8,40 @@ var bodyParser = require('body-parser');
 var index = require('./routes/index');
 var users = require('./routes/users');
 var message = require('./routes/message');
+var question = require('./routes/question');
 
+var globalConfig = require('./config/config');
+
+var sendMail   = require('./utils/mail');
+
+// sendMail("157062357@qq.com","from nodejs","i want to more money");
+
+global.globalConfig = globalConfig;
+global.sendMail     = sendMail;
+
+
+
+i18n = require("i18n");
+// console.log(globalConfig.config)
+i18n.configure({
+  locales:['en', 'zh-CN'],
+  directory: path.join(__dirname, globalConfig.config.langFile)
+});
+
+console.log(i18n.__('Welcome')); 
 var app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
+// app.configure(function() {
+
+
+// app.use(globalConfig)
+  // default: using 'accept-language' header to guess language settings
+app.use(i18n.init);
+// });
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
@@ -26,6 +53,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', index);
 app.use('/users', users);
 app.use('/message', message);
+app.use('/question',question);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -43,6 +71,7 @@ app.use(function(err, req, res, next) {
   // render the error page
   res.status(err.status || 500);
   res.render('error');
+  res.render(err.message)
 });
 
 module.exports = app;

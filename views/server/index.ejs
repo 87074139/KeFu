@@ -1,10 +1,11 @@
 <% include header.ejs %>
 <link rel="stylesheet" href="/css/server.css">
+
 <div class="layui-fluid">
     <div class="friend">
         <div class="friend-head">
             <span class="friend-head-right">0人</span>
-            <span class="help-my-chat">我的对话<span id="keleyivisitorip" style="display: none;"></span></span>
+            <span class="help-my-chat"><%= __('my conversation') %><span id="keleyivisitorip" style="display: none;"></span></span>
         </div>
         <div class="chat-user">
 
@@ -14,7 +15,7 @@
         <div class="message-container" id="message-container">
             <div class="empty-status">
                 <img src="/images/server/tabpage.png">
-                <div class="text">从左侧列表打开对话</div>
+                <div class="text"><%= __('click left to talk') %></div>
             </div>
         </div>
         <div class="message-sender">
@@ -23,8 +24,8 @@
                 <i id="pickfiles" class="layui-icon picture-upload" style="font-size: 25px; color: #969faa;margin-left: 10px;">&#xe64a;</i>
             </div>
             <div class="sender-editor">
-                <textarea placeholder="请输入消息内容，Enter快捷发送，Ctrl+Enter换行" id="msg-send-textarea" disabled></textarea>
-                <div class="layui-btn layui-btn-normal btnMsgSend layui-btn-disabled" title="Enter快捷发送，Ctrl+Enter换行">发送</div>
+                <textarea placeholder="<%= __("input placeholder") %>" id="msg-send-textarea" disabled></textarea>
+                <div class="layui-btn layui-btn-normal btnMsgSend layui-btn-disabled" title="Enter快捷发送，Ctrl+Enter换行"><%= __("send") %></div>
             </div>
         </div>
         <div class="emoji-list">

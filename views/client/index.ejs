@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>客服系统</title>
+    <title><%= globalConfig.config.title %></title>
     <meta name="viewport" content="initial-scale=1, maximum-scale=1">
     <link rel="shortcut icon" href="/favicon.ico">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -19,8 +19,8 @@
     <div class="page page-current">
         <!-- 标题栏 -->
         <header class="bar bar-nav">
-            <a href="tel:10086"><span class="icon icon-phone pull-left open-panel"></span></a>
-            <h1 class="title">客服系统<span id="keleyivisitorip" style="display: none;"></span></h1>
+            <!-- <a href="tel:"><span class="icon icon-phone pull-left open-panel"></span></a> -->
+            <h1 class="title"><%= __("title") %><span id="keleyivisitorip" style="display: none;"></span></h1>
         </header>
         <!-- 这里是页面内容区 -->
         <div class="content">
@@ -35,8 +35,8 @@
                         <span id="pickfiles" class="icon icon-picture picture-upload"></span>
                     </div>
                     <div class="text-holder">
-                        <textarea id="textarea" placeholder="请输入"></textarea>
-                        <a id="btnSend">发送</a>
+                        <textarea id="textarea" placeholder="<%= __("please input") %>"></textarea>
+                        <a id="btnSend"><%= __("send") %></a>
                     </div>
                 </div>
             </footer>

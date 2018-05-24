@@ -14,13 +14,18 @@ router.get('/admin', function(req, res, next) {
 router.get('/client', function(req, res, next) {
     res.render('./client/index');
 });
-
+router.get('/client/offline', function(req, res, next) {
+    res.render('./client/offline');
+});
 router.get('/admin/users', function(req, res, next) {
     res.render('./server/users');
 });
 
 router.get('/admin/setup', function(req, res, next) {
     res.render('./server/setup');
+});
+router.get('/admin/login', function(req, res, next) {
+    res.render('./server/login');
 });
 
 router.get('/uptoken', function(req, res, next) {
@@ -33,6 +38,20 @@ router.get('/uptoken', function(req, res, next) {
     var putPolicy = new qiniu.rs.PutPolicy(options);
     var uploadToken=putPolicy.uploadToken(mac);
     res.send({"uptoken":uploadToken});
+});
+
+
+router.get('/admin/auth', function(req, res, next) {
+    
+    var password = req.query.password
+    console.log(password)
+    if(!password){
+        return res.send({code:500,msg:"参数不全"});
+    }
+    // res.send({code:200,msg:"参数不全"});
+    // res.end();
+    res.redirect("/admin")
+    
 });
 
 module.exports = router;
