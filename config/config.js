@@ -1,6 +1,7 @@
 var config = {
     "title" : "客服系统",
     "chatOpen" : true,
+    "port"  : 9010,
     "languageDefault" : "en",
     "langFile" : "language",
     "mongodbUrl" : "mongodb://192.168.100.251:11037/kefu",
@@ -10,6 +11,8 @@ var config = {
         "smtp_password" : "joyfort"
     },
 
+    "maintain" : false,
+    
     
 };
 

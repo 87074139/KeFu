@@ -36,7 +36,36 @@ function addReply(qid,from_uid,to_uid,content,chat_type,image,callback) {
         "image" : image,
     };
     var msgModel = new ReplyModel(info);
+    ReopenQuestion(qid,function(err,info){
+        if(err) {
+
+        }
+        console.log("ReopenQuestion"+info)
+    })
     msgModel.save(function(err, res){
+        return callback(err,res);
+    });
+}
+
+function addReplyFromAdmin(qid,from_uid,to_uid,content,chat_type,image,callback) {
+    var info = {
+        "QuestionId" : qid,
+        "from_uid" : from_uid,
+        "to_uid" : to_uid,
+        "content" : content,
+        "chat_type" : chat_type,
+        "image" : image,
+    };
+    var msgModel = new ReplyModel(info);
+    msgModel.save(function(err, res){
+        if(err) {
+
+        }
+        
+        finishQuestion(qid,function(err,data){
+            console.log(err);
+            console.log(data);
+        });
         return callback(err,res);
     });
 }
@@ -63,6 +92,7 @@ function addQuestion(email,question,callback) {
     };
     var queModel = new QuestionModel(info);
     queModel.save(function(err, res){
+        
         return callback(err,res);
     });
 } 
@@ -70,6 +100,18 @@ function addQuestion(email,question,callback) {
 function finishQuestion(id,callback) {
     QuestionModel.findOneAndUpdate({_id:id}, {status:1}, callback);
 }
+/**
+ * 玩家回复后，问题开启
+ */
+function ReopenQuestion(id,callback) {
+    QuestionModel.findOneAndUpdate({_id:id,status:1}, {status:0}, callback);
+}
+
+/**
+ * 定时删除 ，过期的问题，
+ * 15天，或者 1个月 或者 7天
+ */
+// function Time
 
 function queryQuestion(email,status=0,size=30,callback) {
     
@@ -81,6 +123,19 @@ function queryQuestion(email,status=0,size=30,callback) {
     
     query.limit(size).sort({"time":-1}).exec(callback);
 }
+function queryQuestionFromAdmin(status=0,size=30,callback) {
+    
+    var query = QuestionModel.find();
+    
+    if(status == -1 || status == null) {
+        query.where('status').gt(-1);
+    } else {
+        query.where('status').equals(status);
+    }
+    
+    query.limit(size).sort({"time":-1}).exec(callback);
+}
+
 
 
 function login(username,password,callback) {
@@ -123,3 +178,8 @@ exports.finishQuestion  = finishQuestion;
 
 exports.addReply        = addReply;
 exports.queryReply      = queryReply;
+
+exports.queryQuestionFromAdmin = queryQuestionFromAdmin;
+
+exports.addReplyFromAdmin       = addReplyFromAdmin;
+

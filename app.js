@@ -14,6 +14,13 @@ var globalConfig = require('./config/config');
 
 var sendMail   = require('./utils/mail');
 
+var cookieParser = require('cookie-parser');
+var csrf = require('csurf');
+
+var csrfProtection = csrf({ cookie: true })
+var parseForm = bodyParser.urlencoded({ extended: false })
+
+
 // sendMail("157062357@qq.com","from nodejs","i want to more money");
 
 global.globalConfig = globalConfig;
@@ -31,6 +38,7 @@ i18n.configure({
 console.log(i18n.__('Welcome')); 
 var app = express();
 
+app.use(cookieParser())
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -49,6 +57,20 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.use(function(req, res, next) {
+  console.log(globalConfig.config.maintain)
+  if(globalConfig.config.maintain ) {
+      // res.render("",{"send":"maintain"});
+      var err = new Error('maintain');
+      err.status = 200;
+      next(err);
+   } else {
+    //  next
+    next();
+   }
+  //  next();
+});
 
 app.use('/', index);
 app.use('/users', users);
@@ -70,8 +92,8 @@ app.use(function(err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render('error');
-  res.render(err.message)
+  res.render('./error');
+  // res.render(err.message)
 });
 
 module.exports = app;

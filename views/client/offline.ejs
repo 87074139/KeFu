@@ -26,7 +26,9 @@
                     <label class="layui-form-label"><%= __("email label")%></label>
                     <div class="layui-input-inline">
                       <input type="text" id="email" name="email" lay-verify="email" autocomplete="off" class="layui-input" value="157062357@qq.com">
+                      
                     </div>
+                    <a href = "/question/list" class="layui-btn" target="_blank" ><%= __("check history question")%></a>
                   </div>
                 </div>
                 
@@ -40,7 +42,7 @@
                 
                 <div class="layui-form-item">
                   <div class="layui-input-block">
-                    <button class="layui-btn" lay-submit="" lay-filter="demo1"><%= __("submit")%></button>
+                    <button class="layui-btn" lay-submit="" lay-filter="demo1" id="send"><%= __("submit")%></button>
                     <button type="reset" class="layui-btn layui-btn-primary"><%= __("reset")%></button>
                   </div>
                 </div>
@@ -56,12 +58,21 @@ layui.use(['layer', 'form','jquery'], function(){
                           ,$ = layui.jquery;
               
   $(function(){
-      $(".layui-btn").click(function(){
+      $("#send").click(function(){
         $.get("/question?email="+$("#email").val()+"&question="+$("#question").val(),function(data)
         {
             if(data.code == 200) {
               // alert(data.id);
-              layer.msg('ID：'+ data.id + ' ');
+              // layer.msg('ID：'+ data.id + ' ');
+              $.get("/question/reply/add?id=" + data.id + "&content=" + $("#question").val(), function (data) {
+                        // layer.msg('ID：'+ data.status + ' 的查看操作');
+                        if (data.status == 1) {
+                          layer.msg("Submit successfull. We will reply as soon as possible. Please do not forget to check your email.");
+                            $("#question").val('');
+                        } else {
+                          layer.msg("Fail to submit. Please try again.");
+                        }
+                    })
             }
         })
       }); 

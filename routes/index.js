@@ -3,6 +3,10 @@ var router = express.Router();
 var AppConfig = require('../config');
 var qiniu = require('qiniu');
 
+router.get('/error', function(req, res, next) {
+    res.render('./error');
+  });
+
 router.get('/', function(req, res, next) {
   res.render('./server/index');
 });
@@ -26,6 +30,39 @@ router.get('/admin/setup', function(req, res, next) {
 });
 router.get('/admin/login', function(req, res, next) {
     res.render('./server/login');
+});
+router.get('/admin/question', function(req, res, next) {
+    res.render('./server/question');
+});
+router.get('/admin/question/reply', function(req, res, next) {
+    res.render('./server/reply');
+});
+
+var questionModel = require('../model/question');
+router.get('/admin/question/reply/add',function(req,res,next){
+    id          = req.query.id;
+    content     = req.query.content;
+    // qid,from_uid,to_uid,content,chat_type,image
+
+    questionModel.addReplyFromAdmin(id,1,0,content,"text","",function(err,data){
+        if(err) {
+            return res.send({"status":500,"data":[]});
+        }
+        return res.send({"status":1,"data":data});
+    });
+
+});
+
+router.get('/admin/question/close', function(req, res, next) {
+    var id = req.query.id ;
+    
+    questionModel.finishQuestion(id,function(err,data){
+        if(err) {
+            return res.send({"status":500});
+        }
+        return res.send({"status":1});
+    });
+
 });
 
 router.get('/uptoken', function(req, res, next) {

@@ -24,5 +24,10 @@
 	"status_resoved": "soled",
 	"table_question_title": "question",
 	"table_time_title": "time",
-	"table_status_title": "status"
+	"table_status_title": "status",
+	"question lists": "question lists",
+	"table_email_title": "table_email_title",
+	" please input ": " please input ",
+	"check history question" : "check history question"
+
 }

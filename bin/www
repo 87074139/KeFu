@@ -7,13 +7,14 @@
 var app = require('../app');
 var debug = require('debug')('kefu:server');
 var http = require('http');
+var config = require('../config/config')
 
 var ioSvc = require('../io/io');
 /**
  * Get port from environment and store in Express.
  */
 
-var port = normalizePort(process.env.PORT || '9010');
+var port = normalizePort(process.env.PORT || config.config.port);
 app.set('port', port);
 
 /**

@@ -19,7 +19,7 @@ router.get('/', function(req, res, next) {
 router.get('/query', function(req, res, next) {
     var email = req.query.email ;
 
-    questionModel.queryQuestion(email,null,3,function(err,data){
+    questionModel.queryQuestion(email,null,30,function(err,data){
         if(err) {
             return res.send({"data":data,code:1,msg:"data is null"});    
         }
@@ -27,6 +27,20 @@ router.get('/query', function(req, res, next) {
     });
 
 });
+
+router.get('/query/all', function(req, res, next) {
+    
+    status = req.query.status;
+
+    questionModel.queryQuestionFromAdmin(status,30,function(err,data){
+        if(err) {
+            return res.send({"data":data,code:1,msg:"data is null"});    
+        }
+        return res.send({"data":data,code:0,msg:""});
+    });
+
+});
+
 router.get('/close', function(req, res, next) {
     var id = req.query.id ;
     
