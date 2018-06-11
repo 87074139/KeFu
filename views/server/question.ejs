@@ -1,0 +1,124 @@
+<% include header.ejs %>
+  <link rel="stylesheet" href="/css/server.css">
+
+  <form class="layui-form" action="" id="formName" onsubmit="return false">
+
+
+    <div class="layui-form-item">
+
+      <div class="layui-inline">
+        <label class="layui-form-label">
+          <%= __("email label")%>
+        </label>
+        <div class="layui-input-inline">
+            <select name="status" id="status" lay-filter="aihao">
+                <option value="0" selected>solving</option>
+                <option value="1" >solved</option>
+                
+              </select>
+
+          <button class="layui-btn" lay-submit="" lay-filter="demo1">
+            <%= __("submit")%>
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </form>
+  <table id="demo" lay-filter="test"></table>
+
+  <script src="/layui/layui.js"></script>
+  <script type="text/html" id="barDemo">
+<a class="layui-btn layui-btn-primary layui-btn-xs" target="_blank" href="/admin/question/reply?id={{d._id}}" lay-event="detail">查看</a>
+<!-- <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a> -->
+<!-- <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a> -->
+</script>
+  <script type="text/html" id="statusTpl">
+<!-- 这里的 checked 的状态只是演示 -->
+{{ d.status == 0 ? '<%= __("status_resoving")%>' : '<%= __("status_resoved")%>' }}
+</script>
+  <script>
+    layui.use(['layer', 'form', 'jquery', 'table'], function () {
+      var layer = layui.layer
+        , form = layui.form
+        , $ = layui.jquery;
+      var table = layui.table;
+      $(".admin-question").addClass("layui-this");
+      $(function () {
+        // $(".layui-btn").click(function () {
+          table.render({
+            elem: '#demo'
+            , height: 700
+            , url: '/question/query/all?status=0' //数据接口
+            , page: true //开启分页
+            , cols: [[ //表头
+              { field: '_id', title: 'ID', width: 280, sort: true, fixed: 'left' }
+              , { field: 'question', title: '<%= __("table_question_title")%>', width: 180 }
+              , { field: 'email', title: '<%= __("table_email_title")%>', width: 180 }
+              , { field: 'time', title: '<%= __("table_time_title")%>', width: 180, sort: true }
+              , { field: 'status', title: '<%= __("table_status_title")%>', width: 180, templet: '#statusTpl' }
+              , { field: 'status', title: '<%= __("table_status_title")%>', width: 180, align: 'center', toolbar: '#barDemo' }
+
+            ]]
+          });
+        // });
+        $(".layui-btn").click(function () {
+          table.render({
+            elem: '#demo'
+            , height: 700
+            , url: '/question/query/all?status='+$("#status").val() //数据接口
+            , page: true //开启分页
+            , cols: [[ //表头
+              { field: '_id', title: 'ID', width: 280, sort: true, fixed: 'left' }
+              , { field: 'question', title: '<%= __("table_question_title")%>', width: 180 }
+              , { field: 'email', title: '<%= __("table_email_title")%>', width: 180 }
+              , { field: 'time', title: '<%= __("table_time_title")%>', width: 180, sort: true }
+              , { field: 'status', title: '<%= __("table_status_title")%>', width: 180, templet: '#statusTpl' }
+              , { field: 'status', title: '<%= __("table_status_title")%>', width: 180, align: 'center', toolbar: '#barDemo' }
+
+            ]]
+          });
+        });
+
+        //监听工具条
+        table.on('tool(test)', function (obj) {
+          var data = obj.data;
+          if (obj.event === 'detail') {
+            //   layer.msg('ID：'+ data._id + ' 的查看操作');
+            // document.location.href = "/admin/question/reply?id=" + data._id;
+
+          } else if (obj.event === 'del') {
+            layer.confirm('真的删除行么', function (index) {
+              obj.del();
+              layer.close(index);
+            });
+          } else if (obj.event === 'edit') {
+            layer.alert('编辑行：<br>' + JSON.stringify(data))
+          }
+        });
+        active = {
+          getCheckData: function () { //获取选中数据
+            var checkStatus = table.checkStatus('idTest')
+              , data = checkStatus.data;
+            layer.alert(JSON.stringify(data));
+          }
+          , getCheckLength: function () { //获取选中数目
+            var checkStatus = table.checkStatus('idTest')
+              , data = checkStatus.data;
+            layer.msg('选中了：' + data.length + ' 个');
+          }
+          , isAll: function () { //验证是否全选
+            var checkStatus = table.checkStatus('idTest');
+            layer.msg(checkStatus.isAll ? '全选' : '未全选')
+          }
+        };
+
+        $('.demoTable .layui-btn').on('click', function () {
+          var type = $(this).data('type');
+          active[type] ? active[type].call(this) : '';
+        });
+      });
+
+    });
+
+  </script>

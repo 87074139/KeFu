@@ -1,0 +1,179 @@
+<% include header.ejs %>
+<link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm.min.css">
+    <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm-extend.min.css">
+    <link rel="stylesheet" href="/css/client.css">
+  <link rel="stylesheet" href="/css/server.css">
+
+  <div class="page-group">
+      <div class="page page-current">
+          <!-- 标题栏 -->
+          <header class="bar bar-nav">
+              <!-- <a href="tel:"><span class="icon icon-phone pull-left open-panel"></span></a> -->
+              <h1 class="title">
+                  <%= __("title") %>
+                      <span id="keleyivisitorip" style="display: none;"></span>
+              </h1>
+          </header>
+          <!-- 这里是页面内容区 -->
+          <div class="content">
+              <div class="content-block msg-container" id="msg-container">
+
+              </div>
+
+              <footer id="chatFooter" class="footer">
+                  <div class="input-holder">
+                      <div class="emoji-image docs-icons" id="btn-uploader">
+                          <span class="icon icon-emoji emoji-send"></span>
+                          <span id="pickfiles" class="icon icon-picture picture-upload"></span>
+                      </div>
+                      <div class="text-holder">
+                          <textarea id="textarea" placeholder="<%= __(" please input ") %>"></textarea>
+                          <a id="btnSend">
+                              <%= __("send") %>
+                          </a>
+                      </div>
+                  </div>
+              </footer>
+              <div class="emoji-list">
+                  <ul>
+                      <li title="笑脸">&#x1F601;</li>
+                      <li title="哭脸">&#x1F602;</li>
+                      <li title="表情1">&#x1F603;</li>
+                      <li title="表情2">&#x1F604;</li>
+                      <li title="表情3">&#x1F605;</li>
+                      <li title="表情4">&#x1F606;</li>
+                      <li title="表情5">&#x1F607;</li>
+                      <li title="表情6">&#x1F608;</li>
+                      <li title="表情7">&#x1F609;</li>
+                      <li title="表情8">&#x1F60A;</li>
+                      <li title="表情9">&#x1F60B;</li>
+                      <li title="表情10">&#x1F60C;</li>
+                  </ul>
+              </div>
+          </div>
+      </div>
+  </div>
+  <script src="/layui/layui.js"></script>
+  <script type='text/javascript' src='/js/common.js' charset='utf-8'></script>
+  <script>
+      //一般直接写在一个js文件中
+      layui.use(['layer', 'form', 'jquery'], function () {
+          var layer = layui.layer
+              , form = layui.form
+              , $ = layui.jquery;
+          $.getUrlParam = function (name) {
+              var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+              var r = window.location.search.substr(1).match(reg);
+              if (r != null) return unescape(r[2]); return null;
+          }
+          $(function () {
+
+              function insert_client_html(msg) {
+                  var time = dateFormat();
+                  if (msg.time) {
+                      time = dateFormat("yyyy-MM-dd hh:mm:ss", new Date(msg.time));
+                  }
+                  if (!msg.chat_type) {
+                      msg.chat_type = 'text';
+                  }
+                  var tpl = '<div class="msg-box">' +
+                      '<div  class="msg-client">' +
+                      '<div  class="date">' + time + ' 我' + '</div>';
+
+                  if (msg.chat_type == "text") {
+                      tpl += '<div class="bubble rich-text-bubble">' +
+                          '<span class="arrow"></span>' +
+                          '<div class="text">' + msg.content + '</div>' +
+                          '<span class="status icon"></span>' +
+                          '</div>';
+                  } else if (msg.chat_type == "image") {
+                      tpl += ' <div class="msg-client-img">' +
+                          '       <a href="' + msg.image + '"target="_blank">' +
+                          '           <img src="' + msg.image + '" alt="photo">' +
+                          '       </a>' +
+                          '    </div>';
+                  }
+
+                  tpl += '</div>' +
+                      '</div>';
+                  $(".msg-container").append(tpl);
+              }
+
+              function insert_agent_html(msg) {
+                  var time = dateFormat();
+                  if (msg.time) {
+                      time = dateFormat("yyyy-MM-dd hh:mm:ss", new Date(msg.time));
+                  }
+                  if (!msg.chat_type) {
+                      msg.chat_type = 'text';
+                  }
+                  var tpl = '<div class="msg-box">' +
+                      '<div class="msg-agent">' +
+                      '<div class="agent-avatar">' +
+                      '<img src="https://s3-qcloud.meiqia.com/pics.meiqia.bucket/avatars/20170929/972a7c64426ed82da1de67ac3f16bd07.png">' +
+                      '</div>' +
+                      '<div class="date">' + time + ' 客服' + '</div>';
+
+                  if (msg.chat_type == "text") {
+                      tpl += '<div class="bubble rich-text-bubble">' +
+                          '<span class="arrow-bg"></span>' +
+                          '<span class="arrow"></span>' +
+                          '<div class="text">' + msg.content + '</div>' +
+                          '</div>';
+                  } else if (msg.chat_type == "image") {
+                      tpl += ' <div class="msg-agent-img">' +
+                          '       <a href="' + msg.image + '"target="_blank">' +
+                          '           <img src="' + msg.image + '" alt="photo">' +
+                          '       </a>' +
+                          '    </div>';
+                  }
+                  tpl += '</div>' +
+                      '</div>';
+                  $(".msg-container").append(tpl);
+              }
+
+              //聊天窗口自动滚到底
+              function scrollToBottom() {
+                  var div = document.getElementById('msg-container');
+                  div.scrollTop = div.scrollHeight;
+              }
+
+              function getReplyContent() {
+                  $.get("/question/reply/query?id=" + $.getUrlParam("id"), function (data) {
+                      // layer.msg('ID：'+ data.status + ' 的查看操作');
+                      if (data.status == 1) {
+                        $(".msg-container").html("");
+                          data.data.reverse().forEach(function (msg) {
+                              if (msg.from_uid == msg.to_uid) {
+                                  insert_client_html(msg);
+                              } else {
+                                  insert_agent_html(msg);
+                              }
+
+                              scrollToBottom();
+                          });
+                      }
+                  })
+              }
+              $("#btnSend").click(function () {
+                  $.get("/admin/question/reply/add?id=" + $.getUrlParam("id") + "&content=" + $("#textarea").val(), function (data) {
+                      // layer.msg('ID：'+ data.status + ' 的查看操作');
+                      if (data.status == 1) {
+                          getReplyContent();
+                          $("#textarea").val('');
+                      } else {
+                          layer.msg("send fail");
+                      }
+                  })
+                  $.get("/admin/question/close?id=" + $.getUrlParam("id"), function (data) {
+                      // layer.msg('ID：'+ data.status + ' 的查看操作');
+                      
+                  })
+              });
+              getReplyContent();
+          });
+
+      });
+
+
+  </script>
