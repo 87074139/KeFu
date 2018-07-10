@@ -1,4 +1,5 @@
 var express = require('express');
+var session = require('express-session')
 var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
@@ -9,6 +10,8 @@ var index = require('./routes/index');
 var users = require('./routes/users');
 var message = require('./routes/message');
 var question = require('./routes/question');
+var admin  = require('./routes/admin')
+var client = require('./routes/client')
 
 var globalConfig = require('./config/config');
 
@@ -27,7 +30,6 @@ global.globalConfig = globalConfig;
 global.sendMail     = sendMail;
 
 
-
 i18n = require("i18n");
 // console.log(globalConfig.config)
 i18n.configure({
@@ -38,6 +40,13 @@ i18n.configure({
 console.log(i18n.__('Welcome')); 
 var app = express();
 
+var sessionConfig = {
+  secret: 'joyfort-session-config#$#$#!',
+  rolling: false,
+  saveUninitialized: true,
+  cookie: { maxAge: 60000 * 480 }
+}
+app.use(session(sessionConfig))
 app.use(cookieParser())
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -58,16 +67,30 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+
+
+
+
 app.use(function(req, res, next) {
-  console.log(globalConfig.config.maintain)
+  console.log("维护状态:"+globalConfig.config.maintain)
   if(globalConfig.config.maintain ) {
       // res.render("",{"send":"maintain"});
       var err = new Error('maintain');
       err.status = 200;
       next(err);
    } else {
+      if(!req.session.username ) {
+        console.log("username:"+req.session.username)
+        // res.redirect("/admin/login")
+        
+      } else {
+        console.log("logined:"+req.session.username)
+        global.username = req.session.username
+      }
+    res.locals.req = req
+    
     //  next
-    next();
+    next()
    }
   //  next();
 });
@@ -76,6 +99,8 @@ app.use('/', index);
 app.use('/users', users);
 app.use('/message', message);
 app.use('/question',question);
+app.use('/admin',admin);
+app.use('/client',client);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

@@ -1,69 +1,114 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <title>客服系统</title>
-  <link rel="stylesheet" href="/layui/css/layui.css">
-  <style>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>客服系统</title>
+    <link rel="stylesheet" href="/layui/css/layui.css">
+    <style>
+        html,
+        body {
+            height: 100%;
+        }
 
-    html,body{
-          height: 100%;
-    }
+        .layui-fluid {
+            height: calc(100% - 110px);
+            padding: 0;
+        }
 
-    .layui-fluid{
-        height: calc(100% - 110px);
-        padding: 0;
-    }
+        .layui-layout-admin .footer-demo {
+            position: static;
+            height: auto;
+            line-height: 30px;
+        }
 
-    .layui-layout-admin .footer-demo {
-        position: static;
-        height: auto;
-        line-height: 30px;
-    }
+        .layui-layout-admin .footer-demo {
+            height: 50px;
+            padding: 5px 0;
+        }
 
-    .layui-layout-admin .footer-demo {
-        height: 50px;
-        padding: 5px 0;
-    }
+        .layui-layout-admin .layui-footer {
+            position: fixed;
+            left: 200px;
+            right: 0;
+            bottom: 0;
+            height: 44px;
+            line-height: 44px;
+            padding: 0 15px;
+            background-color: #eee;
+        }
 
-    .layui-layout-admin .layui-footer {
-        position: fixed;
-        left: 200px;
-        right: 0;
-        bottom: 0;
-        height: 44px;
-        line-height: 44px;
-        padding: 0 15px;
-        background-color: #eee;
-    }
+        .footer {
+            position: fixed;
+            z-index: 9999;
+            bottom: 0;
+            padding: 10px 0;
+            line-height: 30px;
+            text-align: center;
+            color: #666;
+            font-weight: 300;
+            width: 100%;
+            border-top: 1px solid #e9e9e9;
+        }
 
-    .footer {
-        position: fixed;
-        z-index: 9999;
-        bottom: 0;
-        padding: 10px 0;
-        line-height: 30px;
-        text-align: center;
-        color: #666;
-        font-weight: 300;
-        width: 100%;
-        border-top: 1px solid #e9e9e9;
-    }
-
-    .layui-foot-main {
-        margin: 0 auto;
-    }
-
-</style>
+        .layui-foot-main {
+            margin: 0 auto;
+        }
+    </style>
 </head>
+
 <body>
     <ul class="layui-nav" lay-filter="nav-admin">
-        <li class="layui-nav-item admin-index"><a href="/admin"><%= __('my conversation') %></a></li>
-        <li class="layui-nav-item admin-users"><a href="/admin/users"><%= __("guest") %></a></li>
-        <li class="layui-nav-item admin-setup"><a href="/admin/setup"><%= __("setting") %></a></li>
-        <li class="layui-nav-item admin-login"><a href="/admin/login"><%= __("login") %></a></li>
-        <li class="layui-nav-item admin-question"><a href="/admin/question"><%= __("question lists") %></a></li>
+        <li class="layui-nav-item admin-index">
+            <a href="/admin">
+                <%= __('my conversation') %>
+            </a>
+        </li>
+        <li class="layui-nav-item admin-users">
+            <a href="/admin/users">
+                <%= __("guest") %>
+            </a>
+        </li>
+        <li class="layui-nav-item admin-setup">
+            <a href="/admin/setup">
+                <%= __("setting") %>
+            </a>
+        </li>
+        <li class="layui-nav-item admin-login">
+            <a href="/admin/login">
+                <%= __("login") %>
+            </a>
+        </li>
+        <li class="layui-nav-item admin-question">
+            <a href="/admin/question">
+                <%= __("question lists") %>
+            </a>
+        </li>
+
+        <li class="layui-nav-item" lay-unselect="">
+            <a href="javascript:;">
+                用户：
+                <%= !req.session.username ?"未登陆":req.session.username %>
+            </a>
+            <dl class="layui-nav-child">
+                <dd>
+                    <a href="javascript:;">修改信息</a>
+                </dd>
+                <dd>
+                    <a href="javascript:;">安全管理</a>
+                </dd>
+                <dd>
+                    <a href="/admin/logout">退了</a>
+                </dd>
+            </dl>
+        </li>
     </ul>
-      
-      
+    <script src="/layui/layui.js"></script>
+    <script>
+        layui.use('element', function () {
+            var element = layui.element; //导航的hover效果、二级菜单等功能，需要依赖element模块
+
+
+        });
+    </script>

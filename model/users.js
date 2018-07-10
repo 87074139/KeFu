@@ -1,4 +1,4 @@
-var mongoose = require('../mongoose').mongoose;
+var mongoose = require('../utils/mongoose').mongoose;
 var crypto = require('crypto');
 
 var Schema = mongoose.Schema;
@@ -10,6 +10,18 @@ var UsersSchema = new Schema({
 });
 
 var UsersModel = mongoose.model("users", UsersSchema);
+
+function reg(username,password,callback) {
+    var md5 = crypto.createHash('md5');
+    password = md5.update(password).digest('hex');
+    var condition = {'username' : username,'password':password};
+
+    userModel = new UsersModel(condition);
+
+    userModel.save(function(err,res){
+        return callback(err,res)
+    })
+}
 
 function login(username,password,callback) {
     var md5 = crypto.createHash('md5');

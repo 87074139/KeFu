@@ -67,6 +67,7 @@
             </div>
         </div>
     </div>
+    <script src="//twemoji.maxcdn.com/2/twemoji.min.js?2.3.1"></script>
     <script src="/layui/layui.js"></script>
     <script type='text/javascript' src='/js/common.js' charset='utf-8'></script>
     <script>
@@ -179,6 +180,15 @@
                             layer.msg("send fail");
                         }
                     })
+                });
+                $(".emoji-list li").click(function () {
+                    var content = $("#textarea").val();
+                    $("#textarea").val(content + " " + $(this).html() + " ");
+                    $(".emoji-list").toggle();
+                });
+
+                $(".emoji-send").click(function () {
+                    $(".emoji-list").toggle();
                 });
                 getReplyContent();
             });

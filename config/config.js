@@ -14,6 +14,11 @@ var config = {
     "maintain" : false,
     
     
+    "admin" : {
+        "1":{ "username" : "1" , "password" : "1" },
+        "2":{"username" : "2" , "password" : "2"}
+    }
+
 };
 
 exports.config = config;

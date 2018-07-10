@@ -50,15 +50,16 @@
       $(".layui-btn").click(function(){
         table.render({
             elem: '#demo'
-            ,height: 315
+            ,height: window.screen.availHeight  * 0.75
+            ,width:document.body.clientWidth
             ,url: '/question/query?email='+$("#email").val() //数据接口
             ,page: true //开启分页
             ,cols: [[ //表头
-              {field: '_id', title: 'ID', width:280, sort: true, fixed: 'left'}
-              ,{field: 'question', title: '<%= __("table_question_title")%>', width:180}
-              ,{field: 'time', title: '<%= __("table_time_title")%>', width:180, sort: true}
-              ,{field: 'status', title: '<%= __("table_status_title")%>', width:180 ,templet: '#statusTpl'} 
-              ,{field: 'status', title: '<%= __("table_status_title")%>', width:180 ,align:'center',toolbar: '#barDemo'} 
+              {field: '_id', title: 'ID', width: document.body.clientWidth*0.2, sort: true, fixed: 'left'}
+              ,{field: 'question', title: '<%= __("table_question_title")%>', width:document.body.clientWidth*0.3}
+              ,{field: 'time', title: '<%= __("table_time_title")%>', width:document.body.clientWidth*0.2, sort: true}
+              ,{field: 'status', title: '<%= __("table_status_title")%>',width:document.body.clientWidth*0.15 ,templet: '#statusTpl'} 
+              ,{field: 'op', title: '<%= __("table_status_title")%>',width:document.body.clientWidth*0.15 ,align:'center',toolbar: '#barDemo'} 
               
             ]]
           });

@@ -1,4 +1,22 @@
 var http=require('http');
+var userModel = require('../model/users')
+function setAdminUser() {
+    console.log(globalConfig.admin)
+}
+
+/**
+ * Only allows the page to be accessed if the user is an admin.
+ * Requires use of `loadUser` middleware.
+ */
+function requireAdmin(req, res, next) {
+    if (!req.session.username ) {
+      next(new Error("Permission denied."));
+      return;
+    }
+    res.set("username",req.session.username)
+    next();
+  }
+  
 
 function getUrlParam(name) {
     var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
@@ -34,3 +52,5 @@ function getIpLocation(ip,callback) {
 
 exports.getClientIp = getClientIp;
 exports.getIpLocation = getIpLocation;
+exports.setAdminUser  = setAdminUser;
+exports.requireAdmin = requireAdmin;

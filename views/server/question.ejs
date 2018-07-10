@@ -38,11 +38,12 @@
 {{ d.status == 0 ? '<%= __("status_resoving")%>' : '<%= __("status_resoved")%>' }}
 </script>
   <script>
-    layui.use(['layer', 'form', 'jquery', 'table'], function () {
+    layui.use(['layer', 'form', 'jquery', 'table','element'], function () {
       var layer = layui.layer
         , form = layui.form
         , $ = layui.jquery;
       var table = layui.table;
+      var element = layui.element;
       $(".admin-question").addClass("layui-this");
       $(function () {
         // $(".layui-btn").click(function () {
