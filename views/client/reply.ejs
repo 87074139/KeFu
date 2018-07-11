@@ -35,10 +35,13 @@
                 </div>
 
                 <footer id="chatFooter" class="footer">
+
                     <div class="input-holder">
-                        <div class="emoji-image docs-icons" id="btn-uploader">
+                        <div class="emoji-image docs-icons layui-upload" id="btn-uploader">
                             <span class="icon icon-emoji emoji-send"></span>
+                            
                             <span id="pickfiles" class="icon icon-picture picture-upload"></span>
+                            
                         </div>
                         <div class="text-holder">
                             <textarea id="textarea" placeholder="<%= __(" please input ") %>"></textarea>
@@ -72,10 +75,14 @@
     <script type='text/javascript' src='/js/common.js' charset='utf-8'></script>
     <script>
         //一般直接写在一个js文件中
-        layui.use(['layer', 'form', 'jquery'], function () {
+        layui.use(['layer', 'form', 'jquery', 'upload'], function () {
             var layer = layui.layer
                 , form = layui.form
                 , $ = layui.jquery;
+            var upload = layui.upload;
+
+
+
             $.getUrlParam = function (name) {
                 var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
                 var r = window.location.search.substr(1).match(reg);
@@ -170,16 +177,20 @@
                         }
                     })
                 }
-                $("#btnSend").click(function () {
-                    $.get("/question/reply/add?id=" + $.getUrlParam("id") + "&content=" + $("#textarea").val(), function (data) {
+                function sendContent(content) {
+                    $.get("/question/reply/add?id=" + $.getUrlParam("id") + "&content=" + content, function (data) {
                         // layer.msg('ID：'+ data.status + ' 的查看操作');
                         if (data.status == 1) {
                             getReplyContent();
                             $("#textarea").val('');
+                            scrollToBottom()
                         } else {
                             layer.msg("send fail");
                         }
                     })
+                }
+                $("#btnSend").click(function () {
+                    sendContent($("#textarea").val());
                 });
                 $(".emoji-list li").click(function () {
                     var content = $("#textarea").val();
@@ -190,6 +201,32 @@
                 $(".emoji-send").click(function () {
                     $(".emoji-list").toggle();
                 });
+
+                //执行实例
+                upload.render({
+                    elem: '#pickfiles' //绑定元素
+                    , url: '/upload' //上传接口
+                    , accept: 'images'
+                    , done: function (res) {
+                        //上传完毕回调
+                        console.log(res)
+                        var msg_sender = {
+                            "type": 'private',
+                            "uid": 'chat-kefu-admin',
+                            "content": '图片消息',
+                            "from_uid": 0,
+                            "chat_type": 'image',
+                            "image": window.location.origin + res.path
+                        };
+                        sendContent('<image style="width:200px;height:200px" src="' + window.location.origin + res.path + '">');
+                        // insert_client_html(msg_sender);
+                        
+                    }
+                    , error: function () {
+                        //请求异常回调
+                    }
+                });
+                $(".layui-upload-file").hide();
                 getReplyContent();
             });
 

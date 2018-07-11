@@ -10,7 +10,9 @@ var config = {
         "smtp_username" : "joyfort6@sina.com",
         "smtp_password" : "joyfort"
     },
-
+    "upload":{
+        "path":"/code/nodejs/KeFu/public/upload/"
+    },
     "maintain" : false,
     
     

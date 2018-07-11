@@ -18,6 +18,7 @@
           <div class="layui-card-body">
               <%= message %>
               <%= error.status %>
+              <pre><%= error.stack %></pre>
               <a href="/admin/login" style="color:red" >重新登陆</a>
           </div>
         </div>

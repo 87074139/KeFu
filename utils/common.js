@@ -1,7 +1,29 @@
 var http=require('http');
 var userModel = require('../model/users')
-function setAdminUser() {
-    console.log(globalConfig.admin)
+var config = require('../config/config').config
+var fs = require('fs')
+
+
+
+function getFilePath() {
+    var d = new Date();
+    var f = config.upload.path+d.getFullYear()+d.getMonth();
+    fs.mkdir(f,function(err){
+        if(err){
+            console.log('创建文件夹出错！');
+        }else{
+            console.log(f+'文件夹-创建成功！');
+            
+        }
+    })
+    console.log(f)
+    return f;
+}
+function saveImageToPath(image,filename) {
+    fs.copyFile(image,getFilePath()+"/"+filename,function(err) {
+        console.log("saveImageToPath:"+err)
+    });
+    
 }
 
 /**
@@ -52,5 +74,6 @@ function getIpLocation(ip,callback) {
 
 exports.getClientIp = getClientIp;
 exports.getIpLocation = getIpLocation;
-exports.setAdminUser  = setAdminUser;
+// exports.setAdminUser  = setAdminUser;
 exports.requireAdmin = requireAdmin;
+exports.saveImageToPath = saveImageToPath;

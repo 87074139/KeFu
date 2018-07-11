@@ -70,7 +70,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 
 
-
 app.use(function(req, res, next) {
   console.log("维护状态:"+globalConfig.config.maintain)
   if(globalConfig.config.maintain ) {
