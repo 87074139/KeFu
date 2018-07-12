@@ -30,18 +30,16 @@
             </header>
             <!-- 这里是页面内容区 -->
             <div class="content">
-                <div class="content-block msg-container" id="msg-container">
-
-                </div>
+                <div class="content-block msg-container" id="msg-container"></div>
 
                 <footer id="chatFooter" class="footer">
 
                     <div class="input-holder">
                         <div class="emoji-image docs-icons layui-upload" id="btn-uploader">
                             <span class="icon icon-emoji emoji-send"></span>
-                            
+
                             <span id="pickfiles" class="icon icon-picture picture-upload"></span>
-                            
+
                         </div>
                         <div class="text-holder">
                             <textarea id="textarea" placeholder="<%= __(" please input ") %>"></textarea>
@@ -78,7 +76,7 @@
         layui.use(['layer', 'form', 'jquery', 'upload'], function () {
             var layer = layui.layer
                 , form = layui.form
-                , $ = layui.jquery;
+                , $ = layui.$;
             var upload = layui.upload;
 
 
@@ -119,6 +117,7 @@
                     tpl += '</div>' +
                         '</div>';
                     $(".msg-container").append(tpl);
+
                 }
 
                 function insert_agent_html(msg) {
@@ -152,12 +151,17 @@
                     tpl += '</div>' +
                         '</div>';
                     $(".msg-container").append(tpl);
+                    console.log($(".msg-container").height());
                 }
 
                 //聊天窗口自动滚到底
                 function scrollToBottom() {
                     var div = document.getElementById('msg-container');
-                    div.scrollTop = div.scrollHeight;
+                    // div.scrollTop = 10000;
+                    setTimeout(function () {
+                        div.scrollTop = 99999;
+                    }, 10)
+                    
                 }
 
                 function getReplyContent() {
@@ -172,8 +176,14 @@
                                     insert_agent_html(msg);
                                 }
 
-                                scrollToBottom();
+
                             });
+                            $(document).ready(function () {
+                                var nScrollHight = $('#msg-container')[0].scrollHeight;
+                                // alert($('#msg-container').height());
+                                // alert($('#msg-container').scrollTop());
+                            });
+                            scrollToBottom();
                         }
                     })
                 }
@@ -183,7 +193,7 @@
                         if (data.status == 1) {
                             getReplyContent();
                             $("#textarea").val('');
-                            scrollToBottom()
+
                         } else {
                             layer.msg("send fail");
                         }
@@ -220,7 +230,7 @@
                         };
                         sendContent('<image style="width:200px;height:200px" src="' + window.location.origin + res.path + '">');
                         // insert_client_html(msg_sender);
-                        
+
                     }
                     , error: function () {
                         //请求异常回调
@@ -228,9 +238,11 @@
                 });
                 $(".layui-upload-file").hide();
                 getReplyContent();
+
             });
 
         });
+
 
 
     </script>
