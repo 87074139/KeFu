@@ -2,72 +2,90 @@ var express = require('express');
 var router = express.Router();
 var AppConfig = require('../config');
 var qiniu = require('qiniu');
-var requireAdmin = require('../utils/common').requireAdmin
-
-router.get('/',requireAdmin, function(req, res, next) {
+var requireAdmin = require('../utils/common').requireAdmin;
+var elasticsearchFuzzyQeury = require('../utils/elasticsearch');
+router.get('/', requireAdmin, function (req, res, next) {
     res.render('./server/index');
-  });
+});
+router.get('/log', requireAdmin, function (req, res, next) {
+    res.render('./server/log');
+});
+router.get('/log/query', requireAdmin, function (req, res, next) {
+    var content = req.query.content;
 
-  router.get('/users', function(req, res, next) {
+    var data = [];
+    elasticsearchFuzzyQeury.fuzzyQuery(content,function(err,response){
+        if(err) {
+            return res.send({"data":[],code:1,msg:"error"});
+        } else {
+            return res.send({"data":response,code:0,msg:""});
+        }
+        
+        // return res.send({ "status": 1, "data": response });
+    });
+    
+    // res.render('./server/log');
+});
+router.get('/users', function (req, res, next) {
     res.render('./server/users');
 });
 
-router.get('/setup', function(req, res, next) {
+router.get('/setup', function (req, res, next) {
     res.render('./server/setup');
 });
-router.get('/login', function(req, res, next) {
+router.get('/login', function (req, res, next) {
     res.render('./server/login');
 });
-router.get('/question',requireAdmin, function(req, res, next) {
+router.get('/question', requireAdmin, function (req, res, next) {
     res.render('./server/question');
 });
-router.get('/question/reply', function(req, res, next) {
+router.get('/question/reply', function (req, res, next) {
     res.render('./server/reply');
 });
 
 var questionModel = require('../model/question');
-router.get('/question/reply/add',function(req,res,next){
-    id          = req.query.id;
-    content     = req.query.content;
+router.get('/question/reply/add', function (req, res, next) {
+    id = req.query.id;
+    content = req.query.content;
     // qid,from_uid,to_uid,content,chat_type,image
 
-    questionModel.addReplyFromAdmin(id,1,0,content,"text","",function(err,data){
-        if(err) {
-            return res.send({"status":500,"data":[]});
+    questionModel.addReplyFromAdmin(id, 1, 0, content, "text", "", function (err, data) {
+        if (err) {
+            return res.send({ "status": 500, "data": [] });
         }
-        return res.send({"status":1,"data":data});
+        return res.send({ "status": 1, "data": data });
     });
 
 });
 
-router.get('/question/close', function(req, res, next) {
-    var id = req.query.id ;
-    
-    questionModel.finishQuestion(id,function(err,data){
-        if(err) {
-            return res.send({"status":500});
+router.get('/question/close', function (req, res, next) {
+    var id = req.query.id;
+
+    questionModel.finishQuestion(id, function (err, data) {
+        if (err) {
+            return res.send({ "status": 500 });
         }
-        return res.send({"status":1});
+        return res.send({ "status": 1 });
     });
 
 });
 var userModel = require('../model/users')
-router.get('/auth', function(req, res, next) {
-    
+router.get('/auth', function (req, res, next) {
+
     var password = req.query.password
     var username = req.query.username
 
     console.log(global.globalConfig.config.admin)
-    if(!password){
-        return res.send({code:500,msg:"参数不全"});
+    if (!password) {
+        return res.send({ code: 500, msg: "参数不全" });
     }
-     var adminConfig = global.globalConfig.config.admin
-     var loginStatus = 0
-    for(a in adminConfig) {
+    var adminConfig = global.globalConfig.config.admin
+    var loginStatus = 0
+    for (a in adminConfig) {
         // console.log(adminConfig[a].username)
-        if ( adminConfig[a].username === username && adminConfig[a].password === password ) {
-            req.session.username = username;   
-            console.log() 
+        if (adminConfig[a].username === username && adminConfig[a].password === password) {
+            req.session.username = username;
+            console.log()
             loginStatus = 1
         }
     }
@@ -93,11 +111,11 @@ router.get('/auth', function(req, res, next) {
         req.session.error = "用户名或者密码不对"
         return res.redirect("/admin/login")
     }
-   
-    
+
+
 });
 
-router.get('/logout',requireAdmin,function(req,res,next){
+router.get('/logout', requireAdmin, function (req, res, next) {
     req.session.username = ""
     return res.redirect("/admin/login")
 })

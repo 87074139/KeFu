@@ -136,6 +136,7 @@
               function scrollToBottom() {
                   var div = document.getElementById('msg-container');
                   div.scrollTop = div.scrollHeight;
+                //   setTimeout(function () {div.scrollTop = 99999;}, 10);
               }
 
               function getReplyContent() {
@@ -150,8 +151,9 @@
                                   insert_agent_html(msg);
                               }
 
-                              scrollToBottom();
+                              
                           });
+                          scrollToBottom();
                       }
                   })
               }
