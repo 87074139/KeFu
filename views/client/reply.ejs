@@ -171,9 +171,10 @@
                             $(".msg-container").html("");
                             data.data.reverse().forEach(function (msg) {
                                 if (msg.from_uid != msg.to_uid) {
-                                    insert_client_html(msg);
-                                } else {
                                     insert_agent_html(msg);
+                                } else {
+                                    
+                                    insert_client_html(msg);
                                 }
 
 
