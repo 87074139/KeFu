@@ -2,7 +2,7 @@ var http=require('http');
 var userModel = require('../model/users')
 var config = require('../config/config').config
 var fs = require('fs')
-
+var sendMail   = require('../utils/mail');
 
 
 function getFilePath() {
@@ -72,8 +72,12 @@ function getIpLocation(ip,callback) {
     });
 }
 
+function sendEmailToCustomer(email,title,content,callback) {
+    sendMail(email,title,content,callback)
+}
 exports.getClientIp = getClientIp;
 exports.getIpLocation = getIpLocation;
 // exports.setAdminUser  = setAdminUser;
 exports.requireAdmin = requireAdmin;
 exports.saveImageToPath = saveImageToPath;
+exports.sendEmailToCustomer=sendEmailToCustomer;

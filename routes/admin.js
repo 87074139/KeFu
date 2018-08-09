@@ -4,6 +4,7 @@ var AppConfig = require('../config');
 var qiniu = require('qiniu');
 var requireAdmin = require('../utils/common').requireAdmin;
 var elasticsearchFuzzyQeury = require('../utils/elasticsearch');
+
 router.get('/', requireAdmin, function (req, res, next) {
     res.render('./server/index');
 });
@@ -44,6 +45,7 @@ router.get('/question/reply', function (req, res, next) {
 });
 
 var questionModel = require('../model/question');
+var common = require('../utils/common');
 router.get('/question/reply/add', function (req, res, next) {
     id = req.query.id;
     content = req.query.content;
@@ -53,7 +55,27 @@ router.get('/question/reply/add', function (req, res, next) {
         if (err) {
             return res.send({ "status": 500, "data": [] });
         }
-        return res.send({ "status": 1, "data": data });
+
+        //回复成功 发送邮件告知
+        questionModel.queryQuestionById(id,function(err,data) {
+            
+            if(err) {
+                return res.send({ "status": 500, "data": [] });
+            } 
+            console.log("------------")
+            if(data[0]) {
+                // console.log(data[0].email,i18n.__('Your question has been updated'),i18n.__('Your question has been updated'))
+                common.sendEmailToCustomer(data[0].email,i18n.__('Your question has been updated'),i18n.__('Your question has been updated'),function(err,info){})
+            }
+            console.log("------------")
+            return res.send({ "status": 1, "data": data });
+        })
+
+        
+
+        
+
+
     });
 
 });

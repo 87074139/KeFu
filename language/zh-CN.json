@@ -21,8 +21,8 @@
     "table_time_title"                : "提问时间",
     "table_status_title"                : "问题描述",
     "status_resoving"                : "解决中",
-    "status_resoved"                : "已经解决"
+    "status_resoved"                : "已经解决",
 
-
+    "Customer Service":"Customer Service"
     
 }

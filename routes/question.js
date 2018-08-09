@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var questionModel = require('../model/question');
-
+var common = require('../utils/common')
 router.get('/', function(req, res, next) {
     var email       = req.query.email ;
     var question    = req.query.question;
@@ -10,7 +10,14 @@ router.get('/', function(req, res, next) {
         if(err) {
             return res.send({"id":"","code":500});
         }
-        sendMail(email,"you have new ticket","this is your question id:"+data._id);
+        //发送邮件
+        common.sendEmailToCustomer(email,i18n.__("Submit the Question successfully"),"this is your question id:"+data._id,function(err,info){
+            // console.log(err)
+            if(err) {
+                console.log("insert question error;"+err);
+            }    
+        });
+        // sendMail(email,"you have new ticket","this is your question id:"+data._id);
         return res.send({"id":data._id,"code":200});
         
     });

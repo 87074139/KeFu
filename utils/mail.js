@@ -27,8 +27,21 @@ let transporter = nodemailer.createTransport({
  * @param {String} subject 发送的主题
  * @param {String} html 发送的html内容
  */
-var sendMail = function (recipient, subject, html) {
+var sendMail = function (recipient, subject, html, callback) {
+    
+    if (!transporter) {
 
+
+        let transporter = nodemailer.createTransport({
+            host: config.config.email.smtp_server,
+            // port: 587,
+            secure: false, // true for 465, false for other ports
+            auth: {
+                user: config.config.email.smtp_username, // generated ethereal user
+                pass: config.config.email.smtp_password // generated ethereal password
+            }
+        });
+    }
     transporter.sendMail({
 
         from: config.config.email.smtp_username,
@@ -44,6 +57,7 @@ var sendMail = function (recipient, subject, html) {
         console.log('Message sent: %s', info.messageId);
         // Preview only available when sending through an Ethereal account
         console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+        callback(error, info)
     });
 }
 

@@ -15,7 +15,7 @@ var client = require('./routes/client')
 
 var globalConfig = require('./config/config');
 
-var sendMail   = require('./utils/mail');
+// var sendMail   = require('./utils/mail');
 
 var cookieParser = require('cookie-parser');
 var csrf = require('csurf');
@@ -27,7 +27,7 @@ var parseForm = bodyParser.urlencoded({ extended: false })
 // sendMail("157062357@qq.com","from nodejs","i want to more money");
 
 global.globalConfig = globalConfig;
-global.sendMail     = sendMail;
+// global.sendMail     = sendMail;
 
 
 i18n = require("i18n");

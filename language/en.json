@@ -30,5 +30,13 @@
 	" please input ": " please input ",
 	"check history question": "check history question",
 	"please input username": "please input username",
-	"log info": "log info"
+	"log info": "log info",
+	"Customer Service":"Customer Service",
+
+	"Your question has been updated" : "Your question has been updated",
+
+	"Submit the Question successfully" :"Submit the Question successfully"
+
+
+
 }
