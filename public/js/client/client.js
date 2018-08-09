@@ -1,6 +1,6 @@
 $(function(){
     //Socket.IO 连接
-    var socket = io.connect('http://'+document.domain+':9010',{
+    var socket = io.connect(window.location.protocol+'//'+document.domain+':9010',{
         "transports":['websocket', 'polling']
     });
     var uuid = '';
