@@ -6,7 +6,7 @@ layui.use(['layer', 'form', 'jquery'], function () {
 
     var currentUUID = '';
     var uuid = '';
-    var socket = io.connect('http://'+document.domain+':9010',{
+    var socket = io.connect(window.location.protocol+'://'+document.domain+':9010',{
         "transports":['websocket', 'polling']
     });
 
