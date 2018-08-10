@@ -88,7 +88,12 @@ function getIpLocation(ip,callback) {
 }
 
 function sendEmailToCustomer(email,title,content,callback) {
-    sendMail(email,title,content,callback)
+    if(validateEmail(email)) {
+        sendMail(email,title,content,callback)
+    } else {
+        callback("email not right",[])
+    }
+    
 }
 exports.getClientIp = getClientIp;
 exports.getIpLocation = getIpLocation;

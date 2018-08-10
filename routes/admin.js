@@ -67,14 +67,16 @@ router.get('/question/reply/add', function (req, res, next) {
                 console.log("------------")
                 if (data[0]) {
                     // console.log(data[0].email,i18n.__('Your question has been updated'),i18n.__('Your question has been updated'))
-                    common.sendEmailToCustomer(data[0].email, i18n.__('Your question has been updated'), i18n.__('Your question has been updated') + "<br>" + common.getHost(req) + "/question/reply?id=" + id, function (err, info) { })
+                    url = common.getHost(req) + "/question/reply?id=" + id;
+                    emailContent = "<a href='" + url + "'>Details of the question</a>"
+                    common.sendEmailToCustomer(data[0].email, i18n.__('Your question has been updated'), i18n.__('Your question has been updated') + "<br>" + emailContent, function (err, info) { })
                 }
                 console.log("------------")
                 return res.send({ "status": 1, "data": data });
             })
         });
     } else {
-        return res.send({ "status": 500, "data": [],"msg":"data error" });
+        return res.send({ "status": 500, "data": [], "msg": "data error" });
     }
 });
 

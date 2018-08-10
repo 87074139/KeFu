@@ -9,6 +9,7 @@ var QuestionSchema = new Schema({
     _id: Schema.Types.ObjectId,
     email: { type: String },
     question: { type: String },
+    type: { type: String, default: "" },
     status: { type: Number, default: 0 },
     time: { type: Date, default: Date.now }
 });
