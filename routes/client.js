@@ -10,7 +10,9 @@ router.get('/', function(req, res, next) {
     res.render('./client/index');
 });
 router.get('/offline', function(req, res, next) {
-    res.render('./client/offline');
+    // console.log(req.csrfToken());
+    // res.render('./client/offline',{csrfToken:req.csrfToken()});
+    res.render('./client/offline')
 });
 
 

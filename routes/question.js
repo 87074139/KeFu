@@ -5,7 +5,7 @@ var common = require('../utils/common')
 router.get('/', function (req, res, next) {
     var email = req.query.email;
     var question = req.query.question;
-
+    // console.log(req.csrfToken())
     //严重邮箱有效性
 
     // if(email)

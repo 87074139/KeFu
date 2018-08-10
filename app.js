@@ -15,15 +15,15 @@ var client = require('./routes/client')
 
 var globalConfig = require('./config/config');
 
-
-
 var csrf = require('csurf');
 
 var csrfProtection = csrf({ cookie: true })
+
+
 var parseForm = bodyParser.urlencoded({ extended: false })
 
 
-
+var app = express();
 global.globalConfig = globalConfig;
 
 
@@ -34,7 +34,7 @@ i18n.configure({
 });
 
 console.log(i18n.__('Welcome'));
-var app = express();
+
 
 var sessionConfig = {
   secret: 'joyfort-session-config#$#$#!',
@@ -43,8 +43,10 @@ var sessionConfig = {
   cookie: { maxAge: 60000 * 480 }
 }
 app.use(session(sessionConfig))
-app.use(cookieParser(globalConfig.config.cookieSign))
-// app.use(cookieParser())
+// app.use(cookieParser(globalConfig.config.cookieSign))
+app.use(cookieParser())
+// app.use(csrf({ cookie: true }))
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');

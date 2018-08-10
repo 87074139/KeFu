@@ -54,9 +54,12 @@ var sendMail = function (recipient, subject, html, callback) {
             console.log(error);
         }
         // console.log('发送成功')
-        console.log('Message sent: %s', info.messageId);
-        // Preview only available when sending through an Ethereal account
-        console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+        if(info) {
+            console.log('Message sent: %s', info.messageId);
+            // Preview only available when sending through an Ethereal account
+            // console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+        }
+        
         callback(error, info)
     });
 }
