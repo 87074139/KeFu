@@ -6,21 +6,33 @@ router.get('/', function (req, res, next) {
     var email = req.query.email;
     var question = req.query.question;
 
-    questionModel.addQuestion(email, question, function (err, data) {
-        if (err) {
-            return res.send({ "id": "", "code": 500 });
-        }
-        //发送邮件
-        common.sendEmailToCustomer(email, i18n.__("Submit the Question successfully"), "this is your question id:" + data._id, function (err, info) {
-            // console.log(err)
-            if (err) {
-                console.log("insert question error;" + err);
-            }
-        });
-        // sendMail(email,"you have new ticket","this is your question id:"+data._id);
-        return res.send({ "id": data._id, "code": 200 });
+    //严重邮箱有效性
 
-    });
+    // if(email)
+    if (!common.validateEmail(email)) {
+        return res.send({ "id": "", "code": 500, "msg": "email error" });
+    }
+    if (email && question) {
+
+
+        questionModel.addQuestion(email, question, function (err, data) {
+            if (err) {
+                return res.send({ "id": "", "code": 500 });
+            }
+            //发送邮件
+            common.sendEmailToCustomer(email, i18n.__("Submit the Question successfully"), "this is your question id:" + data._id, function (err, info) {
+                // console.log(err)
+                if (err) {
+                    console.log("insert question error;" + err);
+                }
+            });
+            // sendMail(email,"you have new ticket","this is your question id:"+data._id);
+            return res.send({ "id": data._id, "code": 200 });
+
+        });
+    } else {
+        return res.send({ "id": "", "code": 500, "msg": "data error" });
+    }
 });
 
 router.get('/query', function (req, res, next) {

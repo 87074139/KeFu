@@ -52,6 +52,15 @@ function getUrlParam(name) {
     if (r != null) return unescape(r[2]); return null;
 }
 
+function validateEmail(email) {
+    var reg = new RegExp("([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((.[a-zA-Z0-9_-]{2,3}){1,2})");
+    var r = email.match(reg)
+    console.log(r);
+    if(r!=null) return true;
+    return false;
+}
+
+
 function getClientIp(req) {
     return req.headers['x-forwarded-for'] ||
         req.connection.remoteAddress ||
@@ -88,3 +97,4 @@ exports.requireAdmin = requireAdmin;
 exports.saveImageToPath = saveImageToPath;
 exports.sendEmailToCustomer=sendEmailToCustomer;
 exports.getHost = getHost;
+exports.validateEmail=validateEmail;

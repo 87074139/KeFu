@@ -1,87 +1,110 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title><%= globalConfig.config.title %></title>
-    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
-    <link rel="shortcut icon" href="/favicon.ico">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
-    <link rel="stylesheet" href="/layui/css/layui.css">
-    <link rel="stylesheet" href="/css/server.css">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>
+    <%= globalConfig.config.title %>
+  </title>
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+  <link rel="shortcut icon" href="/favicon.ico">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  <link rel="stylesheet" href="/layui/css/layui.css">
+  <link rel="stylesheet" href="/css/server.css">
 </head>
 
 <body>
-        <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
-                <legend></legend>
-              </fieldset>
-               
-              <form class="layui-form" action="" id="formName" onsubmit="return false" >
-                
-                <div class="layui-form-item">
-                  
-                  <div class="layui-inline">
-                    <label class="layui-form-label"><%= __("email label")%></label>
-                    <div class="layui-input-inline">
-                      <input type="text" id="email" name="email" lay-verify="email" autocomplete="off" class="layui-input" value="">
-                      
-                    </div>
-                    <a href = "/question/list" class="layui-btn" target="_blank" ><%= __("check history question")%></a>
-                  </div>
-                </div>
-                
-                
-                <div class="layui-form-item layui-form-text">
-                  <label class="layui-form-label"><%= __("question lable")%></label>
-                  <div class="layui-input-block">
-                    <textarea placeholder="" class="layui-textarea" name="question" id="question"></textarea>
-                  </div>
-                </div>
-                
-                <div class="layui-form-item">
-                  <div class="layui-input-block">
-                    <button class="layui-btn" lay-submit="" lay-filter="demo1" id="send"><%= __("submit")%></button>
-                    <button type="reset" class="layui-btn layui-btn-primary"><%= __("reset")%></button>
-                  </div>
-                </div>
-              </form>
+  <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+    <legend></legend>
+  </fieldset>
+
+  <form class="layui-form" action="" id="formName" onsubmit="return false">
+
+    <div class="layui-form-item">
+
+      <div class="layui-inline">
+        <label class="layui-form-label">
+          <%= __("email label")%>
+        </label>
+        <div class="layui-input-inline">
+          <input type="text" id="email" name="email" lay-verify="email" autocomplete="off" class="layui-input" value="">
+
+        </div>
+        <a href="/question/list" class="layui-btn" target="_blank">
+          <%= __("check history question")%>
+        </a>
+      </div>
+    </div>
 
 
-<script src="/layui/layui.js"></script>
-<script>
-                //一般直接写在一个js文件中
-layui.use(['layer', 'form','jquery'], function(){
-                  var layer = layui.layer
-                          ,form = layui.form
-                          ,$ = layui.jquery;
-              
-  $(function(){
-      $("#send").click(function(){
-        $.get("/question?email="+$("#email").val()+"&question="+$("#question").val(),function(data)
-        {
-            if(data.code == 200) {
-              // alert(data.id);
-              // layer.msg('ID：'+ data.id + ' ');
-              $.get("/question/reply/add?id=" + data.id + "&content=" + $("#question").val(), function (data) {
-                        // layer.msg('ID：'+ data.status + ' 的查看操作');
-                        if (data.status == 1) {
-                          layer.msg("Submit successfull. We will reply as soon as possible. Please do not forget to check your email.");
-                            $("#question").val('');
-                        } else {
-                          layer.msg("Fail to submit. Please try again.");
-                        }
-                    })
-            }
-        })
-      }); 
+    <div class="layui-form-item layui-form-text">
+      <label class="layui-form-label">
+        <%= __("question lable")%>
+      </label>
+      <div class="layui-input-block">
+        <textarea placeholder="" class="layui-textarea" name="question" id="question"></textarea>
+      </div>
+    </div>
+
+    <div class="layui-form-item">
+      <div class="layui-input-block">
+        <button class="layui-btn" lay-submit="" lay-filter="demo1" id="send">
+          <%= __("submit")%>
+        </button>
+        <button type="reset" class="layui-btn layui-btn-primary">
+          <%= __("reset")%>
+        </button>
+      </div>
+    </div>
+  </form>
+
+
+  <script src="/layui/layui.js"></script>
+  <script>
+    //一般直接写在一个js文件中
+    layui.use(['layer', 'form', 'jquery'], function () {
+      var layer = layui.layer
+        , form = layui.form
+        , $ = layui.jquery;
+
+      $(function () {
+
+        function isEmail(str) {
+          var reg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((.[a-zA-Z0-9_-]{2,3}){1,2})$/;
+          return reg.test(str);
+        }
+
+        $("#send").click(function () {
+          if ($("#email").val() != "") {
+            $.get("/question?email=" + $("#email").val() + "&question=" + $("#question").val(), function (data) {
+              if (data.code == 200) {
+                // alert(data.id);
+                // layer.msg('ID：'+ data.id + ' ');
+                $.get("/question/reply/add?id=" + data.id + "&content=" + $("#question").val(), function (data) {
+                  // layer.msg('ID：'+ data.status + ' 的查看操作');
+                  if (data.status == 1) {
+                    layer.msg("Submit successfull. We will reply as soon as possible. Please do not forget to check your email.");
+                    $("#question").val('');
+                  } else {
+                    layer.msg("Fail to submit. Please try again.");
+                  }
+                })
+              } else {
+                layer.msg(data.msg?data.msg:"Fail to submit. Please try again.");
+              }
+            })
+          }
+
+        });
+      });
+
     });
 
-});
 
-
-</script>
+  </script>
 </body>
 
 </html>
