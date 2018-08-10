@@ -1,8 +1,8 @@
-<% include header.ejs %>
+
 <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm.min.css">
     <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm-extend.min.css">
     <link rel="stylesheet" href="/css/client.css">
-  <link rel="stylesheet" href="/css/server.css">
+  <!-- <link rel="stylesheet" href="/css/server.css"> -->
 
   <div class="page-group">
       <div class="page page-current">
@@ -53,19 +53,23 @@
           </div>
       </div>
   </div>
+  
+  <script src="//twemoji.maxcdn.com/2/twemoji.min.js?2.3.1"></script>
+
   <script src="/layui/layui.js"></script>
   <script type='text/javascript' src='/js/common.js' charset='utf-8'></script>
   <script>
       //一般直接写在一个js文件中
-      layui.use(['layer', 'form', 'jquery'], function () {
+      layui.use(['layer', 'form', 'jquery', 'upload'], function () {
           var layer = layui.layer
               , form = layui.form
               , $ = layui.jquery;
+              var upload = layui.upload;
           $.getUrlParam = function (name) {
               var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
               var r = window.location.search.substr(1).match(reg);
               if (r != null) return unescape(r[2]); return null;
-          }
+          };
           $(function () {
 
               function insert_client_html(msg) {
@@ -157,8 +161,8 @@
                       }
                   })
               }
-              $("#btnSend").click(function () {
-                  $.get("/admin/question/reply/add?id=" + $.getUrlParam("id") + "&content=" + $("#textarea").val(), function (data) {
+              function sendContent(content) {
+                $.get("/admin/question/reply/add?id=" + $.getUrlParam("id") + "&content=" + content, function (data) {
                       // layer.msg('ID：'+ data.status + ' 的查看操作');
                       if (data.status == 1) {
                           getReplyContent();
@@ -167,11 +171,48 @@
                           layer.msg("send fail");
                       }
                   })
+              }
+              $("#btnSend").click(function () {
+                  sendContent($("#textarea").val());
                   $.get("/admin/question/close?id=" + $.getUrlParam("id"), function (data) {
                       // layer.msg('ID：'+ data.status + ' 的查看操作');
                       
                   })
               });
+              $(".emoji-list li").click(function () {
+                    var content = $("#textarea").val();
+                    $("#textarea").val(content + " " + $(this).html() + " ");
+                    $(".emoji-list").toggle();
+                });
+
+                $(".emoji-send").click(function () {
+                    $(".emoji-list").toggle();
+                });
+             //执行实例
+             upload.render({
+                    elem: '#pickfiles' //绑定元素
+                    , url: '/upload' //上传接口
+                    , accept: 'images'
+                    , done: function (res) {
+                        //上传完毕回调
+                        console.log(res)
+                        var msg_sender = {
+                            "type": 'private',
+                            "uid": 'chat-kefu-admin',
+                            "content": '图片消息',
+                            "from_uid": 0,
+                            "chat_type": 'image',
+                            "image": window.location.origin + res.path
+                        };
+                        sendContent('<image style="width:200px;height:200px" src="' + window.location.origin + res.path + '">');
+                        // insert_client_html(msg_sender);
+
+                    }
+                    , error: function () {
+                        //请求异常回调
+                    }
+                });
+                $(".layui-upload-file").hide();
               getReplyContent();
           });
 
