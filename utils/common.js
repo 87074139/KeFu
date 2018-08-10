@@ -3,6 +3,12 @@ var userModel = require('../model/users')
 var config = require('../config/config').config
 var fs = require('fs')
 var sendMail   = require('../utils/mail');
+var Url = require('url')
+
+function getHost(req) {
+    return req.protocol+"://"+req.hostname;
+}
+
 
 
 function getFilePath() {
@@ -31,11 +37,11 @@ function saveImageToPath(image,filename) {
  * Requires use of `loadUser` middleware.
  */
 function requireAdmin(req, res, next) {
-    if (!req.session.username ) {
+    if (!req.cookies.username ) {
       next(new Error("Permission denied."));
       return;
     }
-    res.set("username",req.session.username)
+    res.set("username",req.cookies.username)
     next();
   }
   
@@ -81,3 +87,4 @@ exports.getIpLocation = getIpLocation;
 exports.requireAdmin = requireAdmin;
 exports.saveImageToPath = saveImageToPath;
 exports.sendEmailToCustomer=sendEmailToCustomer;
+exports.getHost = getHost;

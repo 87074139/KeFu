@@ -94,7 +94,7 @@
         <li class="layui-nav-item" lay-unselect="">
             <a href="javascript:;">
                 用户：
-                <%= !req.session.username ?"未登陆":req.session.username %>
+                <%= !req.cookies.username ?"未登陆":req.cookies.username %>
             </a>
             <dl class="layui-nav-child">
                 <dd>

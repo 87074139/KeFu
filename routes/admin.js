@@ -65,7 +65,7 @@ router.get('/question/reply/add', function (req, res, next) {
             console.log("------------")
             if(data[0]) {
                 // console.log(data[0].email,i18n.__('Your question has been updated'),i18n.__('Your question has been updated'))
-                common.sendEmailToCustomer(data[0].email,i18n.__('Your question has been updated'),i18n.__('Your question has been updated'),function(err,info){})
+                common.sendEmailToCustomer(data[0].email,i18n.__('Your question has been updated'),i18n.__('Your question has been updated')+"<br>"+common.getHost(req)+"/question/reply?id="+id,function(err,info){})
             }
             console.log("------------")
             return res.send({ "status": 1, "data": data });
@@ -107,6 +107,8 @@ router.get('/auth', function (req, res, next) {
         // console.log(adminConfig[a].username)
         if (adminConfig[a].username === username && adminConfig[a].password === password) {
             req.session.username = username;
+            res.cookie('username', username, { expires: new Date(Date.now() + 86400000), httpOnly: true });
+            res.cookie('loginStatus', 1, { expires: new Date(Date.now() + 86400000), httpOnly: true });
             console.log()
             loginStatus = 1
         }
@@ -138,7 +140,9 @@ router.get('/auth', function (req, res, next) {
 });
 
 router.get('/logout', requireAdmin, function (req, res, next) {
-    req.session.username = ""
+    
+    res.cookie('loginStatus', 0, { expires: new Date(Date.now() + 86400000), httpOnly: true });
+    res.clearCookie("username" );
     return res.redirect("/admin/login")
 })
 

@@ -1,6 +1,7 @@
 var config = {
     "title" : "客服系统",
     "chatOpen" : true,
+    "cookieSign" : "33333333",
     "port"  : 9010,
     "languageDefault" : "en",
     "langFile" : "language",
