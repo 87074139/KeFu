@@ -18,6 +18,8 @@
 	"please input password": "input password",
 	"question lable": "question",
 	"email label": "email",
+	"server label": "服务器",
+	"phone label": "手机型号",
 	"submit": "submit",
 	"reset": "reset",
 	"status_resoving": "solving",
@@ -31,12 +33,11 @@
 	"check history question": "check history question",
 	"please input username": "please input username",
 	"log info": "log info",
-	"Customer Service":"Customer Service",
-
-	"Your question has been updated" : "Your question has been updated",
-
-	"Submit the Question successfully" :"Submit the Question successfully"
-
-
-
+	"Customer Service": "Customer Service",
+	"Your question has been updated": "Your question has been updated",
+	"Submit the Question successfully": "Submit the Question successfully",
+	"label description": "description:",
+	"submit description": "submit description",
+	"submit description1": "submit description1",
+	"submit description2": "submit description2"
 }

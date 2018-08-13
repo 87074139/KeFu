@@ -12,6 +12,8 @@ router.get('/', function(req, res, next) {
 router.get('/offline', function(req, res, next) {
     // console.log(req.csrfToken());
     // res.render('./client/offline',{csrfToken:req.csrfToken()});
+    // res.setLocale('zh-CN');
+    res.cookie('language', 'zh-CN', { maxAge: 900000, httpOnly: true });
     res.render('./client/offline')
 });
 

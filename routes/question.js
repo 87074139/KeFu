@@ -5,6 +5,8 @@ var common = require('../utils/common')
 router.get('/', function (req, res, next) {
     var email = req.query.email;
     var question = req.query.question;
+     var server  = req.query.server;
+     var phone   = req.query.phone;
     // console.log(req.csrfToken())
     //严重邮箱有效性
 
@@ -15,7 +17,7 @@ router.get('/', function (req, res, next) {
     if (email && question) {
 
 
-        questionModel.addQuestion(email, question, function (err, data) {
+        questionModel.addQuestion(email, question,server,phone,"game", function (err, data) {
             if (err) {
                 return res.send({ "id": "", "code": 500 });
             }

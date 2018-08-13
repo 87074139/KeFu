@@ -10,6 +10,8 @@ var QuestionSchema = new Schema({
     email: { type: String },
     question: { type: String },
     type: { type: String, default: "" },
+    server:{ type: String, default: "" },
+    phone:{ type: String, default: "" },
     status: { type: Number, default: 0 },
     time: { type: Date, default: Date.now }
 });
@@ -85,11 +87,14 @@ function queryReply(qid, page, size, uid, callback) {
 }
 
 
-function addQuestion(email, question, callback) {
+function addQuestion(email, question,server,phone,type, callback) {
     var info = {
         "_id": new mongoose.Types.ObjectId,
         "email": email,
         "question": question,
+        "server":server,
+        "phone":phone,
+        "type":type
     };
     var queModel = new QuestionModel(info);
     queModel.save(function (err, res) {

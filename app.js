@@ -30,6 +30,14 @@ global.globalConfig = globalConfig;
 i18n = require("i18n");
 i18n.configure({
   locales: ['en', 'zh-CN'],
+  defaultLocale: 'en',
+  cookie: 'language',
+  queryParameter: 'language',
+  // watch for changes in json files to reload locale on updates - defaults to false
+  autoReload: true,
+
+  // whether to write new locale information to disk - defaults to true
+  updateFiles: false,
   directory: path.join(__dirname, globalConfig.config.langFile)
 });
 

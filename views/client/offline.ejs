@@ -3,6 +3,7 @@
 
 <head>
   <meta charset="utf-8">
+  <meta http-equiv="content-language" content="zh-CN">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>
     <%= globalConfig.config.title %>
@@ -39,6 +40,32 @@
       </div>
     </div>
 
+    <div class="layui-form-item">
+
+      <div class="layui-inline">
+        <label class="layui-form-label">
+          <%= __("server label")%>
+        </label>
+        <div class="layui-input-inline">
+          <input type="text" id="server" name="server"  autocomplete="off" class="layui-input" value="">
+
+        </div>
+        
+      </div>
+    </div>
+    <div class="layui-form-item">
+
+      <div class="layui-inline">
+        <label class="layui-form-label">
+          <%= __("phone label")%>
+        </label>
+        <div class="layui-input-inline">
+          <input type="text" id="phone" name="phone"  autocomplete="off" class="layui-input" value="">
+
+        </div>
+        
+      </div>
+    </div>
 
     <div class="layui-form-item layui-form-text">
       <label class="layui-form-label">
@@ -54,13 +81,22 @@
         <button class="layui-btn" lay-submit="" lay-filter="demo1" id="send">
           <%= __("submit")%>
         </button>
-        <button type="reset" class="layui-btn layui-btn-primary">
-          <%= __("reset")%>
-        </button>
+        
       </div>
     </div>
   </form>
-
+  <div class="layui-form-item">
+      <label class="layui-form-label">
+        <%= __("label description")%>
+      </label>
+      <div class="layui-input-block">
+        <%= __n("submit description")%><br>
+        <%= __n("submit description1")%><br>
+        <%= __n("submit description2")%>
+      </div>
+      
+  
+  </div>
 
   <script src="/layui/layui.js"></script>
   <script>
@@ -79,7 +115,7 @@
 
         $("#send").click(function () {
           if ($("#email").val() != "") {
-            $.get("/question?email=" + $("#email").val() + "&question=" + $("#question").val(), function (data) {
+            $.get("/question?email=" + $("#email").val() + "&question=" + $("#question").val()+ "&server=" + $("#server").val()+ "&phone=" + $("#phone").val(), function (data) {
               if (data.code == 200) {
                 // alert(data.id);
                 // layer.msg('ID：'+ data.id + ' ');
