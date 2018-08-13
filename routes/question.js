@@ -12,14 +12,14 @@ router.get('/', function (req, res, next) {
 
     // if(email)
     if (!common.validateEmail(email)) {
-        return res.send({ "id": "", "code": 500, "msg": "email error" });
+        return res.send({ "id": "", "status": 500, "msg": "email error" });
     }
     if (email && question) {
 
 
         questionModel.addQuestion(email, question,server,phone,"game", function (err, data) {
             if (err) {
-                return res.send({ "id": "", "code": 500 });
+                return res.send({ "id": "", "status": 500 });
             }
             //发送邮件
             common.sendEmailToCustomer(email, i18n.__("Submit the Question successfully"), "this is your question id:" + data._id, function (err, info) {
@@ -29,9 +29,18 @@ router.get('/', function (req, res, next) {
                 }
             });
             // sendMail(email,"you have new ticket","this is your question id:"+data._id);
-            return res.send({ "id": data._id, "code": 200 });
+            // return res.send({ "id": data._id, "code": 200 });
+            content1 = "server:"+server+"<br>"+"phone:"+phone+"<br>"+question; 
+            questionModel.addReply(data._id.toString(), 0, 0, content1, "text", "", function (err, data) {
+                if (err) {
+                    return res.send({ "status": 500, "data": [] });
+                }
+                return res.send({ "status": 1, "data": data });
+            });
 
         });
+
+
     } else {
         return res.send({ "id": "", "code": 500, "msg": "data error" });
     }

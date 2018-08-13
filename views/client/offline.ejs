@@ -116,21 +116,19 @@
         $("#send").click(function () {
           if ($("#email").val() != "") {
             $.get("/question?email=" + $("#email").val() + "&question=" + $("#question").val()+ "&server=" + $("#server").val()+ "&phone=" + $("#phone").val(), function (data) {
-              if (data.code == 200) {
+              // if (data.code == 200) {
                 // alert(data.id);
+                
                 // layer.msg('ID：'+ data.id + ' ');
-                $.get("/question/reply/add?id=" + data.id + "&content=" + $("#question").val(), function (data) {
-                  // layer.msg('ID：'+ data.status + ' 的查看操作');
-                  if (data.status == 1) {
+                if (data.status == 1) {
                     layer.msg("Submit successfull. We will reply as soon as possible. Please do not forget to check your email.");
                     $("#question").val('');
                   } else {
                     layer.msg("Fail to submit. Please try again.");
                   }
-                })
-              } else {
-                layer.msg(data.msg?data.msg:"Fail to submit. Please try again.");
-              }
+              // } else {
+              //   layer.msg(data.msg?data.msg:"Fail to submit. Please try again.");
+              // }
             })
           }
 
