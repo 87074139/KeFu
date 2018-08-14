@@ -17,6 +17,12 @@ var globalConfig = require('./config/config');
 
 var csrf = require('csurf');
 
+var event = require('./utils/event');
+
+var cron = require('./utils/cron');
+
+event.runTest();
+
 var csrfProtection = csrf({ cookie: true })
 
 
@@ -41,7 +47,7 @@ i18n.configure({
   directory: path.join(__dirname, globalConfig.config.langFile)
 });
 
-console.log(i18n.__('Welcome'));
+// console.log(i18n.__('Welcome'));
 
 
 var sessionConfig = {

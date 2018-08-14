@@ -13,7 +13,22 @@ client.on("error", function (err) {
 client.on('connect', function(){
     console.log('Redis连接成功.');
 });
+// this key will expire after 10 seconds
+// client.set('key', 'value!', 'EX', 10);
 
+redisSvc.setNX = function(key,value,callback) {
+
+    client.setnx(key,value,function(err,res){
+        
+        if(err) {
+            console.log(err)
+            callback(err,null);
+        } else {
+        
+            callback(null,res);
+        }
+    })
+}
 /**
  * 添加string类型的数据
  * @param key 键

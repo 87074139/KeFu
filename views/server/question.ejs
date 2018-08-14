@@ -56,7 +56,12 @@
               { field: '_id', title: 'ID', width: 280, sort: true, fixed: 'left' }
               , { field: 'question', title: '<%= __("table_question_title")%>', width: 180 }
               , { field: 'email', title: '<%= __("table_email_title")%>', width: 180 }
-              , { field: 'time', title: '<%= __("table_time_title")%>', width: 180, sort: true }
+              , { field: 'time',templet: function(d){
+                  console.log(d.time)
+                  var js = new Date(d.time);
+
+        return js.toLocaleString();
+      }, title: '<%= __("table_time_title")%>', width: 180, sort: true }
               , { field: 'status', title: '<%= __("table_status_title")%>', width: 180, templet: '#statusTpl' }
               , { field: 'status', title: '<%= __("table_status_title")%>', width: 180, align: 'center', toolbar: '#barDemo' }
 

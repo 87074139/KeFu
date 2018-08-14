@@ -1,37 +1,42 @@
 var express = require('express');
 var router = express.Router();
 var questionModel = require('../model/question');
-var common = require('../utils/common')
+var common = require('../utils/common');
+var event = require('../utils/event');
 router.get('/', function (req, res, next) {
     var email = req.query.email;
     var question = req.query.question;
-     var server  = req.query.server;
-     var phone   = req.query.phone;
+    var server = req.query.server;
+    var phone = req.query.phone;
     // console.log(req.csrfToken())
-    //严重邮箱有效性
-
-    // if(email)
+    
     if (!common.validateEmail(email)) {
         return res.send({ "id": "", "status": 500, "msg": "email error" });
     }
     if (email && question) {
 
 
-        questionModel.addQuestion(email, question,server,phone,"game", function (err, data) {
+        questionModel.addQuestion(email, question, server, phone, "game", function (err, data) {
             if (err) {
                 return res.send({ "id": "", "status": 500 });
             }
             //发送邮件
-            common.sendEmailToCustomer(email, i18n.__("Submit the Question successfully"), "this is your question id:" + data._id, function (err, info) {
+            // common.sendEmailToCustomer(email, i18n.__("Submit the Question successfully"), "this is your question id:" + data._id, function (err, info) {
+            //     // console.log(err)
+            //     if (err) {
+            //         console.log("insert question error;" + err);
+            //     }
+            // });
+            event.runEventEmailSend(email, i18n.__("Submit the Question successfully"), "this is your question id:" + data._id, function (err, info) {
                 // console.log(err)
                 if (err) {
-                    console.log("insert question error;" + err);
+                    console.log("send question email error;" + err);
                 }
             });
             // sendMail(email,"you have new ticket","this is your question id:"+data._id);
             // return res.send({ "id": data._id, "code": 200 });
             // content1 = "server:"+server+"<br>"+"phone:"+phone+"<br>"+question; 
-            content1 = i18n.__n("summary of issues",{server:server,phone:phone,content:question});
+            content1 = i18n.__n("summary of issues", { server: server, phone: phone, content: question });
             questionModel.addReply(data._id.toString(), 0, 0, content1, "text", "", function (err, data) {
                 if (err) {
                     return res.send({ "status": 500, "data": [] });

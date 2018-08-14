@@ -4,6 +4,11 @@ var crypto = require('crypto');
 var Schema = mongoose.Schema;
 
 
+function dateFormat (val) {
+    console.log(val);
+    if (!val) return val;
+    return (val.getMonth() + 1) + "/" + val.getDate() + "/" + val.getFullYear();
+  }
 
 var QuestionSchema = new Schema({
     _id: Schema.Types.ObjectId,

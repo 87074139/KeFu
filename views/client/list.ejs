@@ -65,7 +65,12 @@
               , cols: [[ //表头
                 { field: '_id', title: 'ID', width: document.body.clientWidth * 0.2, sort: true, fixed: 'left' }
                 , { field: 'question', title: '<%= __("table_question_title")%>', width: document.body.clientWidth * 0.3 }
-                , { field: 'time', title: '<%= __("table_time_title")%>', width: document.body.clientWidth * 0.2, sort: true }
+                , { field: 'time',templet: function(d){
+                  console.log(d.time)
+                  var js = new Date(d.time);
+
+        return js.toLocaleString();
+      }, title: '<%= __("table_time_title")%>', width: document.body.clientWidth * 0.2, sort: true }
                 , { field: 'status', title: '<%= __("table_status_title")%>', width: document.body.clientWidth * 0.15, templet: '#statusTpl' }
                 , { field: 'op', title: '<%= __("table_status_title")%>', width: document.body.clientWidth * 0.15, align: 'center', toolbar: '#barDemo' }
 
