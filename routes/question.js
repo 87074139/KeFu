@@ -30,7 +30,8 @@ router.get('/', function (req, res, next) {
             });
             // sendMail(email,"you have new ticket","this is your question id:"+data._id);
             // return res.send({ "id": data._id, "code": 200 });
-            content1 = "server:"+server+"<br>"+"phone:"+phone+"<br>"+question; 
+            // content1 = "server:"+server+"<br>"+"phone:"+phone+"<br>"+question; 
+            content1 = i18n.__n("summary of issues",{server:server,phone:phone,content:question});
             questionModel.addReply(data._id.toString(), 0, 0, content1, "text", "", function (err, data) {
                 if (err) {
                     return res.send({ "status": 500, "data": [] });

@@ -39,5 +39,6 @@
 	"label description": "description:",
 	"submit description": "submit description",
 	"submit description1": "submit description1",
-	"submit description2": "submit description2"
+	"submit description2": "submit description2",
+	"summary of issues":"server:{{server}}<br>phone:{{phone}}<br>{{content}}"
 }

@@ -105,6 +105,7 @@
       var layer = layui.layer
         , form = layui.form
         , $ = layui.jquery;
+        
 
       $(function () {
 
@@ -123,6 +124,7 @@
                 if (data.status == 1) {
                     layer.msg("Submit successfull. We will reply as soon as possible. Please do not forget to check your email.");
                     $("#question").val('');
+                    layui.data("question",{key:'email',value:$("#email").val()})
                   } else {
                     layer.msg("Fail to submit. Please try again.");
                   }

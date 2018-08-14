@@ -39,5 +39,6 @@
 	"submit description": "1. 请输入您可以正常接收邮件的邮箱，问题得到解决后您会收到提示邮件。",
 	"submit description1": " 2. 点击查看历史并输入您预先留下的邮箱即可查看问题状态。",
 	"submit description2": "3. 在游戏里主界面点击左上角头像即可查看您所在的服务器。",
-	"label description": "使用说明："
+	"label description": "使用说明：",
+	"summary of issues":"服务器:{{server}}手机类型:{{phone}}<br>{{content}}"
 }
